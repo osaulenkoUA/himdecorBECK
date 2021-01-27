@@ -6,6 +6,11 @@ require('dotenv').config();
 
 const articleRouter = require('./articles/articles.router');
 const productRouter = require('./products/products.router');
+const galleryRouter = require('./gallery/gallery.router');
+
+galleryRouter
+
+
 mongoose.set('debug', true);
 
 module.exports = class HimdecorServer {
@@ -50,6 +55,8 @@ module.exports = class HimdecorServer {
   initRoutes() {
     this.server.use('/articles', articleRouter);
     this.server.use('/product', productRouter);
+    this.server.use('/gallery', galleryRouter);
+
   }
 
   async initDatabase() {

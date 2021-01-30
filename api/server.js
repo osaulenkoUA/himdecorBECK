@@ -8,8 +8,7 @@ const articleRouter = require('./articles/articles.router');
 const productRouter = require('./products/products.router');
 const galleryRouter = require('./gallery/gallery.router');
 
-galleryRouter
-
+galleryRouter;
 
 mongoose.set('debug', true);
 
@@ -47,16 +46,15 @@ module.exports = class HimdecorServer {
         }
       },
     };
-    this.server.use(cors({ origin: 'http://localhost:3000' }));
+    // this.server.use(cors({ origin: 'http://localhost:3000' }));
 
-    // this.server.use(cors(corsOptions));
+    this.server.use(cors());
   }
 
   initRoutes() {
     this.server.use('/articles', articleRouter);
     this.server.use('/product', productRouter);
     this.server.use('/gallery', galleryRouter);
-
   }
 
   async initDatabase() {

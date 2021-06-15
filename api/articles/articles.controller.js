@@ -1,5 +1,4 @@
 const articleModel = require('./articles.model.js');
-const { ObjectId } = require('mongodb');
 
 async function addArticle(req, res, next) {
   try {

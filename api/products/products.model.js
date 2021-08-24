@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+
+const featuresProduct=new Schema({
+  weight:{type:String,required:false, default:"0"},
+  price:{type:String,required:false,default:"0"},
+})
+
 const productSchema = new Schema({
   group: { type: String, required: true },
   name: { type: String, required: true },
   fasovka: { type: String, required: false },
+  features:[featuresProduct],
   sklad: { type: String, required: false },
   time: { type: String, required: false },
   vutratu: { type: String, required: false },

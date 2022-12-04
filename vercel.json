@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "name": "himdecor-back",
+  "builds": [
+    { "src": "api/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "api/index.js" }
+  ]
+}

@@ -8,7 +8,7 @@ const articleRouter = require('./articles/articles.router');
 const productRouter = require('./products/products.router');
 const galleryRouter = require('./gallery/gallery.router');
 
-galleryRouter;
+
 
 mongoose.set('debug', true);
 
@@ -30,23 +30,9 @@ module.exports = class HimdecorServer {
   }
   initMiddlewares() {
     this.server.use(express.json());
-    this.server.use(express.urlencoded());
 
-    const whiteList = [
-      'http://localhost:3000',
-      'https://himdecorreact.netlify.app',
-    ];
+    this.server.use(express.urlencoded({ extended: true }));
 
-    const corsOptions = {
-      origin: function (origin, callback) {
-        if (whiteList.indexOf(origin) !== -1) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-    };
-    // this.server.use(cors({ origin: 'http://localhost:3000' }));
 
     this.server.use(cors());
   }

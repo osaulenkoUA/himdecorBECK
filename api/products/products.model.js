@@ -26,6 +26,12 @@ const productSchema = new Schema({
 
 });
 
+async function updateFields(data) {
+  return this.findByIdAndUpdate(data._id, data);
+}
+
+productSchema.statics.updateFields = updateFields
+
 const productModel = mongoose.model('Product', productSchema);
 
 module.exports = productModel;

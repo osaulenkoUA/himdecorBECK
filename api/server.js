@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
 const articleRouter = require('./articles/articles.router');
 const productRouter = require('./products/products.router');
 const galleryRouter = require('./gallery/gallery.router');
+const fileRouter = require('./file/file.router');
 
 
 
@@ -29,11 +31,17 @@ module.exports = class HimdecorServer {
     this.server = express();
   }
   initMiddlewares() {
-    this.server.use(express.json());
+    this.server.use(express.json({ limit: '10MB' }));
 
     this.server.use(express.urlencoded({ extended: true }));
+    this.server.use(express.raw({
+      inflate: true,
+      limit: '10MB',
+      type: 'application/octet-stream'
+    }));
 
-
+    // this.server.use(bodyParser.json());
+    // this.server.use(bodyParser.urlencoded({ extended: true }));
     this.server.use(cors());
   }
 
@@ -41,10 +49,11 @@ module.exports = class HimdecorServer {
     this.server.use('/articles', articleRouter);
     this.server.use('/product', productRouter);
     this.server.use('/gallery', galleryRouter);
+    this.server.use('/file', fileRouter);
   }
 
   async initDatabase() {
-    await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(process.env.MONGODB_URL,{ useNewUrlParser: true, useUnifiedTopology: true });
   }
 
   startListening() {

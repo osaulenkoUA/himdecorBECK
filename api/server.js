@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 
 require('dotenv').config();
 
@@ -58,9 +57,10 @@ module.exports = class HimdecorServer {
 
   startListening() {
     try {
-      return this.server.listen(process.env.PORT, () => {
+       this.server.listen(process.env.PORT, () => {
         console.log('Database connection successful', process.env.PORT);
       });
+       this.server.timeout = 20000
     } catch (err) {
       console.log('error', err);
       process.exit(1);

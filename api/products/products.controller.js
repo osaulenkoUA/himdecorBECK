@@ -40,6 +40,16 @@ async function updateItem(req, res, next) {
 }
 
 
+async function deleteItem(req, res, next) {
+    try {
+        const contactId = req.params.id;
+        const contact = await productsModel.findByIdAndDelete({ _id: contactId });
+        !contact ? res.status(404).send() : res.status(200).json({message:`product with ${contactId} was deleted`,isSuccessful:true});
+    } catch (err) {
+        next();
+    }
+}
+
 function validateId(req, res, next) {
     const {id} = req.params;
 
@@ -50,4 +60,4 @@ function validateId(req, res, next) {
     next();
 }
 
-module.exports = {addProduct, getProducts, getProductById, validateId, updateItem};
+module.exports = {addProduct, getProducts, getProductById, validateId, updateItem,deleteItem};

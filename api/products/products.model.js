@@ -27,7 +27,7 @@ const productSchema = new Schema({
     urlimage: {type: String, required: false},
     buyurl: {type: String, required: false},
     matchurl: {type: String, required: false},
-    images: [image]
+    // images: [image]
 });
 
 async function updateFields(data) {

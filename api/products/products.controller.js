@@ -21,7 +21,7 @@ async function getProducts(req, res, next) {
 
 async function getProductById(req, res, next) {
     try {
-        const productId = req.params.id;
+        const productId = req.query.id;
         const product = await productsModel.findOne({_id: productId});
         !product ? res.status(404).send() : res.status(200).json(product);
     } catch (err) {
@@ -42,17 +42,16 @@ async function updateItem(req, res, next) {
 
 async function deleteItem(req, res, next) {
     try {
-        const contactId = req.params.id;
-        const contact = await productsModel.findByIdAndDelete({ _id: contactId });
-        !contact ? res.status(404).send() : res.status(200).json({message:`product with ${contactId} was deleted`,isSuccessful:true});
+        const {id} = req?.query;
+        const contact = await productsModel.findByIdAndDelete({ _id: id });
+        !contact ? res.status(404).send() : res.status(200).json({message:`product with ${id} was deleted`,isSuccessful:true});
     } catch (err) {
         next();
     }
 }
 
 function validateId(req, res, next) {
-    const {id} = req.params;
-
+    const {id} = req?.query;
     if (!ObjectId.isValid(id)) {
         return res.status(400).send();
     }

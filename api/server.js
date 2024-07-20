@@ -33,7 +33,6 @@ module.exports = class HimdecorServer {
     this.server.use(express.json({ limit: '10MB' }));
 
     this.server.use(express.urlencoded({ extended: true }));
-    this.server.use('/images', express.static('/home/alex/web/himdecor/public/images/shop'));
     this.server.use(express.raw({
       inflate: true,
       limit: '10MB',

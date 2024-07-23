@@ -9,6 +9,7 @@ const featuresProduct = new Schema({
 const image = new Schema({
     name: {type: String, required: true, default: "0"},
     url: {type: String, required: false},
+    isMain: {type: Boolean, required: false, default: false},
 })
 
 const productSchema = new Schema({
@@ -28,7 +29,7 @@ const productSchema = new Schema({
     buyurl: {type: String, required: false},
     matchurl: {type: String, required: false},
     images: [image]
-});
+},{ timestamps: true });
 
 async function updateFields(data) {
     return this.findByIdAndUpdate(data._id, data);

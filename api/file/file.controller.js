@@ -1,4 +1,3 @@
-const fileModel = require('./file.model');
 const Client = require('ssh2-sftp-client');
 
 async function uploadFileToServer(fileBuffer, fileName, targetDir) {
@@ -11,7 +10,7 @@ async function uploadFileToServer(fileBuffer, fileName, targetDir) {
             username: process.env.SFTP_USER,
             password: process.env.SFTP_PASS,
         });
-        await client.put(Buffer.from(fileBuffer), remoteFilePath);
+        await client.put(fileBuffer, remoteFilePath);
         console.log(`File successfully uploaded to ${remoteFilePath}`);
     } catch (err) {
         console.error('Error uploading file:', err);
@@ -23,15 +22,14 @@ async function uploadFileToServer(fileBuffer, fileName, targetDir) {
 
 async function addFile(req, res, next) {
     try {
-        const { file, fileName, targetDir } = req.body;
-        const encoder = new TextEncoder();
-        const fileBuffer = encoder.encode(file);
-        await uploadFileToServer(fileBuffer, fileName, targetDir);
-        return res.status(200).json({message: 'File uploaded successfully'});
+        const { targetDir } = req.body;
+        const file = req.file;
+        await uploadFileToServer(file.buffer, file.originalname, targetDir);
+        return res.status(200).json({ message: 'File uploaded successfully' });
     } catch (error) {
         console.error('Error handling file upload:', error);
         next(error);
-        return res.status(500).json({error: 'Failed to upload file'});
+        return res.status(500).json({ error: 'Failed to upload file' });
     }
 }
 

@@ -13,42 +13,38 @@ async function uploadFileToServer(fileBuffer, fileName, targetDir) {
     try {
         await client.connect(connectConfig);
         await client.put(fileBuffer, remoteFilePath);
-        console.log(`File successfully uploaded to ${remoteFilePath}`);
     } catch (err) {
-        console.error('Error uploading file:', err);
         throw err;
     } finally {
         await client.end();
     }
 }
 
-async function addFile(req, res, next) {
+async function addFile(req, res) {
     try {
         const { targetDir } = req.body;
         const file = req.file;
         await uploadFileToServer(file.buffer, file.originalname, targetDir);
-        return res.status(200).json({ message: 'File uploaded successfully' });
+        return res.status(200).json({ message: 'File uploaded successfully',isSuccessful:true });
     } catch (error) {
-        console.error('Error handling file upload:', error);
-        next(error);
-        return res.status(500).json({ error: 'Failed to upload file' });
+        return res.status(500).json({ error: 'Failed to upload file',isSuccessful:false });
     }
 }
 async function deleteFile(req, res, next) {
+    const client = new Client();
     try {
         const { targetDir,fileName } = req.body;
         const remoteFilePath = `${targetDir}/${fileName}`;
 
-        const client = new Client();
-
         await client.connect(connectConfig);
         await client.delete(remoteFilePath);
-        console.log(`File successfully DELETED `);
-        return res.status(200).json({ message: 'File DELETED successfully' });
+
+        return res.status(200).json({ message: 'File DELETED successfully',isSuccessful:true });
     } catch (error) {
-        console.error('Error handling file DELETED:', error);
-        next(error);
-        return res.status(500).json({ error: 'Failed to DELETED file' });
+        return res.status(500).json({ error: 'Failed to DELETED file',isSuccessful:false });
+    }
+    finally {
+        await client.end();
     }
 }
 

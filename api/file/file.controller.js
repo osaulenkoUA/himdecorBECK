@@ -1,4 +1,5 @@
 const Client = require('ssh2-sftp-client');
+const productsModel = require("../products/products.model");
 
 const connectConfig={
     host: process.env.SFTP_HOST,
@@ -30,15 +31,15 @@ async function addFile(req, res) {
         return res.status(500).json({ error: 'Failed to upload file',isSuccessful:false });
     }
 }
-async function deleteFile(req, res, next) {
+async function deleteFile(req, res) {
     const client = new Client();
     try {
-        const { targetDir,fileName } = req.body;
+        const { targetDir,fileName,body } = req.body;
         const remoteFilePath = `${targetDir}/${fileName}`;
 
         await client.connect(connectConfig);
         await client.delete(remoteFilePath);
-
+        await productsModel.updateFields(body)
         return res.status(200).json({ message: 'File DELETED successfully',isSuccessful:true });
     } catch (error) {
         return res.status(500).json({ error: 'Failed to DELETED file',isSuccessful:false });

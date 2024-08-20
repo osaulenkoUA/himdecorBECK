@@ -13,7 +13,7 @@ async function uploadFileToServer(fileBuffer, fileName, targetDir) {
     const remoteFilePath = `${targetDir}/${fileName}`;
     try {
         await client.connect(connectConfig);
-        await client.put(fileBuffer, remoteFilePath);
+        return await client.put(fileBuffer, remoteFilePath)
     } catch (err) {
         throw err;
     } finally {
@@ -22,11 +22,15 @@ async function uploadFileToServer(fileBuffer, fileName, targetDir) {
 }
 
 async function addFile(req, res) {
+    let uploadedFiles=[]
     try {
         const { targetDir } = req.body;
-        const file = req.file;
-        await uploadFileToServer(file.buffer, file.originalname, targetDir);
-        return res.status(200).json({ message: 'File uploaded successfully',isSuccessful:true });
+        const files = req.files;
+        for (const file of files) {
+           const uploadedResult = await uploadFileToServer(file.buffer, file.originalname, targetDir);
+           uploadedFiles.push(uploadedResult)
+        }
+        return res.status(200).json({ message: 'Files uploaded successfully',isSuccessful:true,uploadedFiles: uploadedFiles });
     } catch (error) {
         return res.status(500).json({ error: 'Failed to upload file',isSuccessful:false });
     }

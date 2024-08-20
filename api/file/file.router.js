@@ -6,7 +6,7 @@ const { addFile,deleteFile } = require('./file.controller.js');
 
 const fileRouter = express.Router();
 
-fileRouter.post('/uploadFile',upload.single('file'),  addFile);
+fileRouter.post('/uploadFile',upload.array('pictures',5),  addFile);
 fileRouter.post('/deleteFile', deleteFile);
 
 module.exports = fileRouter;
